@@ -88,16 +88,7 @@ func (c *CLI) Run(args []string) int {
 
 	defer resp.Body.Close()
 
-	execute(resp, c)
+	io.Copy(c.outStream, resp.Body)
 
 	return ExitCodeOK
-}
-
-func execute(response *http.Response, c *CLI) {
-	body, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		fmt.Fprint(c.errStream, err)
-	}
-
-	fmt.Fprint(c.outStream, string(body))
 }
